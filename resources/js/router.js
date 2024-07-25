@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from './components/Home.vue';
-import About from './components/About.vue';
-import NotFound from './components/NotFound.vue';
+import Home from './Pages/Home.vue';
+import About from './Pages/About.vue';
+import NotFound from './NotFound.vue';
 
 const routes = [
     { path: '/', component: Home },
@@ -15,3 +15,5 @@ const router = createRouter({
 });
 
 export default router;
+
+// Inertia.jsを使用する場合は、vue-routerは不要
