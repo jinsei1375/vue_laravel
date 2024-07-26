@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-    Route::get('/my-posts', [PostController::class, 'myPosts'])->name('posts.myPosts');
+    Route::get('/all-posts', [PostController::class, 'allPosts'])->name('posts.allPosts');
 });
 Route::get('/create-test-posts', [PostController::class, 'createTestPosts']);
 

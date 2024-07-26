@@ -14,9 +14,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        // Post/index.vueを返す
+        $userId = auth()->id();
+        $posts = Post::with('user')->where('user_id', $userId)->get();
+
         return Inertia::render('Posts/Index', [
-            'posts' => Post::with('user')->get()
+            'posts' => $posts
         ]);
     }
 
@@ -68,12 +70,9 @@ class PostController extends Controller
         //
     }
 
-    public function myPosts()
+    public function allPosts()
     {
-        $userId = auth()->id();
-        $posts = Post::with('user')->where('user_id', $userId)->get();
-
-        return response()->json($posts);
+        return response()->json(Post::with('user')->get());
     }   
 
     public function createTestPosts()

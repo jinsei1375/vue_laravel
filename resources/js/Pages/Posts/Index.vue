@@ -9,9 +9,9 @@ const props = defineProps({
 });
 const posts = ref(props.posts);
 
-const fetchMyPosts = async () => {
+const fetchAllPosts = async () => {
     try {
-        const response = await axios.get("/my-posts");
+        const response = await axios.get("/all-posts");
         posts.value = response.data;
     } catch (error) {
         console.error(error);
@@ -26,10 +26,10 @@ const fetchMyPosts = async () => {
             <h1>投稿一覧</h1>
         </div>
         <div>
-            <button @click="fetchMyPosts">自分の投稿を表示</button><br />
+            <button @click="fetchAllPosts">他ユーザー含む全投稿を表示</button>
             <!-- /postsに遷移 -->
             <button @click="$inertia.visit(route('posts.index'))">
-                全ての投稿を表示
+                自分の投稿を表示
             </button>
         </div>
         <div v-if="posts.length === 0">投稿がありません</div>
@@ -53,5 +53,9 @@ li {
     border-bottom: 1px solid #ccc;
     margin-bottom: 10px;
     padding-bottom: 10px;
+}
+button {
+    margin: 10px;
+    border: 1px solid #ccc;
 }
 </style>
