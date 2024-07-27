@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class PostController extends Controller
@@ -15,7 +16,10 @@ class PostController extends Controller
     public function index()
     {
         $userId = auth()->id();
-        $posts = Post::with('user')->where('user_id', $userId)->get();
+        $posts = Post::with('user')
+            ->where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return Inertia::render('Posts/Index', [
             'posts' => $posts
@@ -55,7 +59,10 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        $post->load('user');
+        return Inertia::render('Posts/Show', [
+            'post' => $post
+        ]);
     }
 
     /**
@@ -77,14 +84,18 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function postDeletePost(Post $post)
     {
-        //
+        Log::info($post->id);
+        $post->delete();
+
+        // onSuccessになるようレスポンス返す
+        return redirect()->route('posts.index');
     }
 
     public function allPosts()
     {
-        return response()->json(Post::with('user')->get());
+        return response()->json(Post::with('user')->orderBy('created_at', 'desc')->get());
     }
 
     public function createTestPosts()

@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
     Route::get('/create-post', [PostController::class, 'getCreatePost'])->name('create.post.get');
     Route::post('/create-post', [PostController::class, 'postCreatePost'])->name('create.post.post');
+    Route::post('/delete-post/{post}', [PostController::class, 'postDeletePost'])->name('delete.post.post');
+    Route::get('/post/{post}', [PostController::class, 'show'])->name('post.show.get');
     Route::get('/all-posts', [PostController::class, 'allPosts'])->name('posts.allPosts');
 });
 Route::get('/create-test-posts', [PostController::class, 'createTestPosts']);

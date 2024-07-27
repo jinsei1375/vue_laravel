@@ -3,24 +3,15 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 
-const content = ref("");
 const form = useForm({
     content: "",
 });
 
-const submit = async () => {
+const submit = () => {
     form.content = content.value;
-    try {
-        await form.post("/create-post", {
-            onSuccess: () => {
-                // form.reset();
-                // form.$inertia.visit(route("posts.index"));
-                console.log("success");
-            },
-        });
-    } catch (error) {
-        console.error(error);
-    }
+    form.post(route("create.post.post"), {
+        onFinish: () => form.reset("content"),
+    });
 };
 </script>
 

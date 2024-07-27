@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import axios from "axios";
 import { ref } from "vue";
 import { formatDate } from "@/Utils/date";
@@ -9,6 +9,8 @@ const props = defineProps({
     posts: Array,
 });
 const posts = ref(props.posts);
+
+console.log(posts.value);
 
 const fetchAllPosts = async () => {
     try {
@@ -40,11 +42,11 @@ const fetchAllPosts = async () => {
         <div v-if="posts.length === 0">投稿がありません</div>
         <ul v-else>
             <li v-for="post in posts" :key="post.id">
-                <!-- <router-link :to="{ name: 'posts.show', params: { id: post.id } }"> -->
-                ユーザー：{{ post.user.name }}<br />
-                投稿内容：{{ post.content }} <br />
-                投稿日時：{{ formatDate(post.created_at) }}
-                <!-- </router-link> -->
+                <Link :href="`/post/${post.id}`">
+                    ユーザー：{{ post.user.name }}<br />
+                    投稿内容：{{ post.content }} <br />
+                    投稿日時：{{ formatDate(post.created_at) }}
+                </Link>
             </li>
         </ul>
     </AuthenticatedLayout>
@@ -65,4 +67,3 @@ button {
     border: 1px solid #ccc;
 }
 </style>
-@/Utils/date
