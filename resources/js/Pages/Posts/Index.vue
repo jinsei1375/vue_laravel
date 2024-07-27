@@ -3,6 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import axios from "axios";
 import { ref } from "vue";
+import { formatDate } from "@/Utils/date";
 
 const props = defineProps({
     posts: Array,
@@ -31,13 +32,18 @@ const fetchAllPosts = async () => {
             <button @click="$inertia.visit(route('posts.index'))">
                 自分の投稿を表示
             </button>
+            <!-- route('posts.create')に遷移するボタンを追加 -->
+            <button @click="$inertia.visit(route('create.post.get'))">
+                投稿追加
+            </button>
         </div>
         <div v-if="posts.length === 0">投稿がありません</div>
         <ul v-else>
             <li v-for="post in posts" :key="post.id">
                 <!-- <router-link :to="{ name: 'posts.show', params: { id: post.id } }"> -->
                 ユーザー：{{ post.user.name }}<br />
-                投稿内容：{{ post.content }}
+                投稿内容：{{ post.content }} <br />
+                投稿日時：{{ formatDate(post.created_at) }}
                 <!-- </router-link> -->
             </li>
         </ul>
@@ -59,3 +65,4 @@ button {
     border: 1px solid #ccc;
 }
 </style>
+@/Utils/date

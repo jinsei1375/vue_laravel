@@ -22,12 +22,24 @@ class PostController extends Controller
         ]);
     }
 
+    public function getCreatePost()
+    {
+        return Inertia::render('Posts/Create');
+    }
+
+
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function postCreatePost(Request $request)
     {
-        //
+        Post::create([
+            'user_id' => auth()->id(),
+            'content' => $request->content
+        ]);
+
+        // 投稿一覧ページへリダイレクト
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -73,7 +85,7 @@ class PostController extends Controller
     public function allPosts()
     {
         return response()->json(Post::with('user')->get());
-    }   
+    }
 
     public function createTestPosts()
     {
