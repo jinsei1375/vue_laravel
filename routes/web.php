@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -36,5 +37,7 @@ Route::get('/create-test-posts', [PostController::class, 'createTestPosts']);
 Route::get('/not-spa', function () {
     return view('not-spa');
 });
+
+Route::middleware('auth:sanctum')->get('/api/auth/user', [AuthenticatedSessionController::class, 'user']);
 
 require __DIR__.'/auth.php';

@@ -5,6 +5,15 @@ import axios from "axios";
 import { ref } from "vue";
 import { formatDate } from "@/Utils/date";
 
+import { onMounted } from "vue";
+import { useUserStore } from "@/Stores/user";
+
+const userStore = useUserStore();
+
+onMounted(() => {
+    userStore.fetchUser();
+});
+
 const props = defineProps({
     posts: Array,
 });
@@ -42,7 +51,12 @@ const fetchAllPosts = async () => {
         <div v-if="posts.length === 0">投稿がありません</div>
         <ul v-else>
             <li v-for="post in posts" :key="post.id">
-                <Link :href="`/post/${post.id}`">
+                <!-- 自分の投稿の時だけリンクを追加 -->
+
+                <Link
+                    :href="`/post/${post.id}`"
+                    v-if="post.user_id === userStore.id"
+                >
                     ユーザー：{{ post.user.name }}<br />
                     投稿内容：{{ post.content }} <br />
                     投稿日時：{{ formatDate(post.created_at) }}
