@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,9 +51,17 @@ class AuthenticatedSessionController extends Controller
         return redirect('/');
     }
 
-    public function user(): JsonResponse
+    public function user(Request $request): JsonResponse
     {
-        $user = Auth::user();
-        return response()->json($user);
+        try {
+            $user = Auth::user();
+            if ($user) {
+                return response()->json($user);
+            } else {
+                return response()->json(['message' => 'User not authenticated'], 401);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Internal Server Error', 'error' => $e->getMessage()], 500);
+        }
     }
 }

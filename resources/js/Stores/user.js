@@ -15,5 +15,15 @@ export const useUserStore = defineStore("user", {
                 this.user = null;
             }
         },
+        setUser(user) {
+            this.user = user;
+        },
+        clearUser() {
+            this.user = null;
+        },
+    },
+    getters: {
+        isAuthenticated: (state) => !!state.user,
+        getUser: (state) => state.user,
     },
 });

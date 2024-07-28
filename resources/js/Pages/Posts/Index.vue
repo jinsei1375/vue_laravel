@@ -9,7 +9,6 @@ import { onMounted } from "vue";
 import { useUserStore } from "@/Stores/user";
 
 const userStore = useUserStore();
-
 onMounted(() => {
     userStore.fetchUser();
 });
@@ -19,6 +18,7 @@ const props = defineProps({
 });
 const posts = ref(props.posts);
 
+console.log(userStore.user);
 console.log(posts.value);
 
 const fetchAllPosts = async () => {
@@ -52,15 +52,19 @@ const fetchAllPosts = async () => {
         <ul v-else>
             <li v-for="post in posts" :key="post.id">
                 <!-- 自分の投稿の時だけリンクを追加 -->
-
                 <Link
                     :href="`/post/${post.id}`"
-                    v-if="post.user_id === userStore.id"
+                    v-if="userStore.user && post.user_id === userStore.user.id"
                 >
                     ユーザー：{{ post.user.name }}<br />
                     投稿内容：{{ post.content }} <br />
                     投稿日時：{{ formatDate(post.created_at) }}
                 </Link>
+                <div v-else>
+                    ユーザー：{{ post.user.name }}<br />
+                    投稿内容：{{ post.content }} <br />
+                    投稿日時：{{ formatDate(post.created_at) }}
+                </div>
             </li>
         </ul>
     </AuthenticatedLayout>
