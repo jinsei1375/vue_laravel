@@ -5,20 +5,11 @@ import axios from "axios";
 import { ref } from "vue";
 import { formatDate } from "@/Utils/date";
 
-import { onMounted } from "vue";
-import { useUserStore } from "@/Stores/user";
-
-const userStore = useUserStore();
-onMounted(() => {
-    userStore.fetchUser();
-});
-
 const props = defineProps({
     posts: Array,
 });
 const posts = ref(props.posts);
 
-console.log(userStore.user);
 console.log(posts.value);
 
 const fetchAllPosts = async () => {
@@ -54,7 +45,10 @@ const fetchAllPosts = async () => {
                 <!-- 自分の投稿の時だけリンクを追加 -->
                 <Link
                     :href="`/post/${post.id}`"
-                    v-if="userStore.user && post.user_id === userStore.user.id"
+                    v-if="
+                        $page.props.auth.user &&
+                        post.user_id === $page.props.auth.user.id
+                    "
                 >
                     ユーザー：{{ post.user.name }}<br />
                     投稿内容：{{ post.content }} <br />
