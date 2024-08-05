@@ -89,8 +89,7 @@ class PostController extends Controller
         Log::info($post->id);
         $post->delete();
 
-        // onSuccessになるようレスポンス返す
-        return redirect()->route('posts.index');
+        return response()->json(['message' => 'Post deleted']);
     }
 
     public function allPosts()
