@@ -5,12 +5,14 @@ import axios from "axios";
 import { ref } from "vue";
 import { formatDate } from "@/Utils/date";
 import PostItem from "@/Components/PostItem.vue";
+import { useFlashMessageStore } from "@/Stores/flashMessage";
 
 const props = defineProps({
     posts: Array,
     auth: Object,
 });
 const posts = ref(props.posts);
+const flashMessageStore = useFlashMessageStore();
 
 console.log(posts.value);
 
@@ -18,6 +20,15 @@ const fetchAllPosts = async () => {
     try {
         const response = await axios.get("/all-posts");
         posts.value = response.data;
+        flashMessageStore.showFlashMessage({
+            message: "全ての投稿を表示しました",
+            type: "success",
+        });
+        console.log(
+            flashMessageStore.visible,
+            flashMessageStore.message,
+            flashMessageStore.type
+        );
     } catch (error) {
         console.error(error);
     }
@@ -28,6 +39,10 @@ const fetchMyPosts = async () => {
     posts.value = props.posts.filter(
         (post) => post.user.id === props.auth.user.id
     );
+    flashMessageStore.showFlashMessage({
+        message: "自分の投稿を表示しました",
+        type: "success",
+    });
 };
 </script>
 
