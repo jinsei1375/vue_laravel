@@ -1,17 +1,32 @@
 <script setup>
+import { showFlashMessage } from "@/Components/FlashMessage/FlashMessage.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Inertia } from "@inertiajs/inertia";
 import { Head, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 
+const content = ref("");
 const form = useForm({
     content: "",
 });
 
-const submit = () => {
+const submit = async () => {
     form.content = content.value;
-    form.post(route("create.post.post"), {
-        onFinish: () => form.reset("content"),
-    });
+    try {
+        const response = await axios.post(route("create.post.post"), {
+            content: form.content,
+        });
+
+        if (response.status === 200) {
+            form.reset("content");
+            Inertia.visit(route("post.show.get", { post: response.data.id }));
+        } else {
+            showFlashMessage("投稿の追加に失敗しました", "error");
+        }
+    } catch (error) {
+        console.error(error);
+        showFlashMessage("追加に失敗しました", "error");
+    }
 };
 </script>
 

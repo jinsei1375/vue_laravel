@@ -37,13 +37,18 @@ class PostController extends Controller
      */
     public function postCreatePost(Request $request)
     {
-        Post::create([
+        $newPost = Post::create([
             'user_id' => auth()->id(),
             'content' => $request->content
         ]);
 
         // 投稿一覧ページへリダイレクト
-        return redirect()->route('posts.index');
+        // return redirect()->route('posts.index');
+        // Inertia::render('Posts/Show', [
+            //     'post' => $newPost
+            // ]);
+        session()->flash('message', '投稿が作成されました');
+        return response()->json(['id' => $newPost->id]); 
     }
 
     /**
@@ -89,6 +94,8 @@ class PostController extends Controller
         Log::info($post->id);
         $post->delete();
 
+        session()->flash('message', '投稿を削除しました');
+        \Log::info("session: " . json_encode(session()->all()));
         return response()->json(['message' => 'Post deleted']);
     }
 
@@ -106,5 +113,15 @@ class PostController extends Controller
         ]);
 
         return response()->json(['message' => 'Test posts created']);
+    }
+
+    public function postUpdatePost(Post $post, Request $request)
+    {
+        \Log::info("content: " . $request->content);
+        $post->content = $request->content;
+        $post->save();
+
+        $request->session()->flash('message', '投稿が更新されました');
+        return redirect()->route('post.show.get', $post->id);
     }
 }
