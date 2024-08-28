@@ -29,6 +29,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        \Log::info("session-all: " . json_encode(session()->all()));
         return [
             ...parent::share($request),
             'auth' => [

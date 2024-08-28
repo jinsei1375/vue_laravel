@@ -122,6 +122,8 @@ class PostController extends Controller
         $post->save();
 
         $request->session()->flash('message', '投稿が更新されました');
+        \Log::info("message: " . session()->get('message'));
+        \Log::info("session-all: " . json_encode(session()->all()));
         return redirect()->route('post.show.get', $post->id);
     }
 }
