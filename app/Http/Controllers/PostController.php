@@ -118,12 +118,15 @@ class PostController extends Controller
     public function postUpdatePost(Post $post, Request $request)
     {
         \Log::info("content: " . $request->content);
-        $post->content = $request->content;
+        $validatedData = $request->validate([
+            'content' => 'required',
+        ], [
+            'content.required' => '投稿内容を入力してください', 
+        ]);
+        $post->content = $validatedData['content'];
         $post->save();
 
         $request->session()->flash('message', '投稿が更新されました');
-        \Log::info("message: " . session()->get('message'));
-        \Log::info("session-all: " . json_encode(session()->all()));
         return redirect()->route('post.show.get', $post->id);
     }
 }

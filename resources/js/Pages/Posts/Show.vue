@@ -6,7 +6,7 @@ import axios from "axios";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { showFlashMessage } from "@/Components/FlashMessage/FlashMessage.vue";
 
-const props = defineProps(["post"]);
+const props = defineProps({ post: Object, errors: Object });
 const form = useForm({
     content: props.post.content,
 });
@@ -15,8 +15,7 @@ const submit = async () => {
     form.content = content.value;
     try {
         form.post(route("update.post.post", { post: props.post.id }), {
-            onFinish: () => {
-                form.reset("content");
+            onSuccess: () => {
                 content.value = form.content;
                 showFlashMessage("投稿が更新されました", "success");
             },
@@ -52,6 +51,9 @@ const handleDelete = async () => {
                 <div>
                     <label for="content">投稿内容</label>
                     <textarea id="content" v-model="form.content"></textarea>
+                    <div v-if="errors.content">
+                        <p>{{ errors.content }}</p>
+                    </div>
                 </div>
                 <div>
                     <button type="submit">更新</button>
